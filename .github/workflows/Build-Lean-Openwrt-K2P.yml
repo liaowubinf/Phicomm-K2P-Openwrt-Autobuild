@@ -61,7 +61,8 @@ jobs:
           
       - name: 编译po2lmo
         run: |
-          mkdir package/luci-app-openclash
+          cd openwrt
+          mkdir -p .../package/luci-app-openclash
           cd package/luci-app-openclash
           git init
           git remote add -f origin https://github.com/vernesong/OpenClash.git
