@@ -58,6 +58,15 @@ jobs:
         run: |
           cd openwrt
           sed -i '/helloworld/s/^#//g' feeds.conf.default
+      
+      - name: Download clash core
+        run: |
+          curl -sL -m 30 --retry 2 https://github.com/vernesong/OpenClash/releases/download/Clash/clash-linux-mipsle-softfloat.tar.gz -o /tmp/clash.tar.gz
+          tar zxvf /tmp/clash.tar.gz -C /tmp >/dev/null 2>&1
+          chmod +x /tmp/clash >/dev/null 2>&1
+          mkdir -p .../package/luci-app-openclash/files/etc/openclash/core
+          mv /tmp/clash .../package/luci-app-openclash/files/etc/openclash/core/clash >/dev/null 2>&1
+          rm -rf /tmp/clash.tar.gz >/dev/null 2>&1
 
       - name: Update & install feeds
         run: cd openwrt && ./scripts/feeds update -a && ./scripts/feeds install -a
@@ -85,15 +94,6 @@ jobs:
           cd openwrt && make download -j$(($(nproc)+1))
           find dl -size -1024c -exec ls -l {} \;
           find dl -size -1024c -exec rm -f {} \;
-
-      - name: Download clash core
-        run: |
-          curl -sL -m 30 --retry 2 https://github.com/vernesong/OpenClash/releases/download/Clash/clash-linux-mipsle-softfloat.tar.gz -o /tmp/clash.tar.gz
-          tar zxvf /tmp/clash.tar.gz -C /tmp >/dev/null 2>&1
-          chmod +x /tmp/clash >/dev/null 2>&1
-          mkdir -p .../package/luci-app-openclash/files/etc/openclash/core
-          mv /tmp/clash .../package/luci-app-openclash/files/etc/openclash/core/clash >/dev/null 2>&1
-          rm -rf /tmp/clash.tar.gz >/dev/null 2>&1
 
       - name: Multi-thread compile
         run: |
