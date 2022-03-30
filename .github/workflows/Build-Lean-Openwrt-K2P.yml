@@ -58,15 +58,20 @@ jobs:
         run: |
           cd openwrt
           sed -i '/helloworld/s/^#//g' feeds.conf.default
-      
-      - name: Download clash core
+          
+      - name: 编译po2lmo
         run: |
-          curl -sL -m 30 --retry 2 https://github.com/vernesong/OpenClash/releases/download/Clash/clash-linux-mipsle-softfloat.tar.gz -o /tmp/clash.tar.gz
-          tar zxvf /tmp/clash.tar.gz -C /tmp >/dev/null 2>&1
-          chmod +x /tmp/clash >/dev/null 2>&1
-          mkdir -p .../package/luci-app-openclash/files/etc/openclash/core
-          mv /tmp/clash .../package/luci-app-openclash/files/etc/openclash/core/clash >/dev/null 2>&1
-          rm -rf /tmp/clash.tar.gz >/dev/null 2>&1
+        mkdir package/luci-app-openclash
+        cd package/luci-app-openclash
+        git init
+        git remote add -f origin https://github.com/vernesong/OpenClash.git
+        git config core.sparsecheckout true
+        echo "luci-app-openclash" >> .git/info/sparse-checkout
+        git pull origin master
+        git branch --set-upstream-to=origin/master master
+        pushd luci-app-openclash/tools/po2lmo
+        make && sudo make install
+        popd
 
       - name: Update & install feeds
         run: cd openwrt && ./scripts/feeds update -a && ./scripts/feeds install -a
@@ -88,6 +93,14 @@ jobs:
 
       # - name: SSH connection to Actions
       #   uses: P3TERX/debugger-action@master
+      - name: Download clash core
+        run: |
+          curl -sL -m 30 --retry 2 https://github.com/vernesong/OpenClash/releases/download/Clash/clash-linux-mipsle-softfloat.tar.gz -o /tmp/clash.tar.gz
+          tar zxvf /tmp/clash.tar.gz -C /tmp >/dev/null 2>&1
+          chmod +x /tmp/clash >/dev/null 2>&1
+          mkdir -p .../package/luci-app-openclash/files/etc/openclash/core
+          mv /tmp/clash .../package/luci-app-openclash/files/etc/openclash/core/clash >/dev/null 2>&1
+          rm -rf /tmp/clash.tar.gz >/dev/null 2>&1
 
       - name: Download package
         run: |
