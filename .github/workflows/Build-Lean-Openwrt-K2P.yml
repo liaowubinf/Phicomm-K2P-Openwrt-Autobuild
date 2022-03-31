@@ -77,19 +77,17 @@ jobs:
       - name: Download clash core
         run: |
           curl -sL -m 30 --retry 2 https://github.com/vernesong/OpenClash/releases/download/Clash/clash-linux-mipsle-softfloat.tar.gz -o /tmp/clash.tar.gz
+          tar zxvf /tmp/clash.tar.gz -C /tmp >/dev/null 2>&1
+          chmod +x /tmp/clash >/dev/null 2>&1
+          mkdir -p .../package/luci-app-openclash/files/etc/openclash/core
+          mv /tmp/clash .../package/luci-app-openclash/files/etc/openclash/core/clash >/dev/null 2>&1
+          rm -rf /tmp/clash.tar.gz >/dev/null 2>&1
           curl -sL -m 30 --retry 2 https://github.com/vernesong/OpenClash/releases/download/TUN-Premium/clash-linux-mipsle-softfloat-2022.03.19.gz -o /tmp/clash_tun.gz
-          tar zxvf /tmp/clash.tar.gz -C /tmp
-          mkdir -p /tmp/clash_tun_dir
-          gzip /tmp/clash_tun.gz -d /tmp/clash_tun_dir
-          mv /tmp/clash_tun_dir/clash /tmp/clash_tun
-          rm -rf /tmp/clash_tun_dir
-          chmod +x /tmp/clash
-          chmod +x /tmp/clash_tun
-          mkdir -p package/luci-app-openclash/files/etc/openclash/core
-          mv /tmp/clash package/luci-app-openclash/files/etc/openclash/core/clash
-          mv /tmp/clash_tun package/luci-app-openclash/files/etc/openclash/core/clash_tun
-          rm -rf /tmp/clash.tar.gz
-          rm -rf /tmp/clash_tun.gz
+          gzip /tmp/clash_tun.gz -d /tmp
+          chmod +x /tmp/clash >/dev/null 2>&1
+          mkdir -p .../package/luci-app-openclash/files/etc/openclash/core
+          mv /tmp/clash .../package/luci-app-openclash/files/etc/openclash/core/clash_tun >/dev/null 2>&1
+          rm -rf /tmp/clash_tun.gz >/dev/null 2>&1
 
       - name: Update & install feeds
         run: cd openwrt && ./scripts/feeds update -a && ./scripts/feeds install -a
