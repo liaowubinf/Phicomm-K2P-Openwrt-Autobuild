@@ -82,11 +82,12 @@ jobs:
           mkdir -p files/etc/openclash/core
           mv /tmp/clash files/etc/openclash/core/clash
           rm -rf /tmp/clash.tar.gz
-          curl -sL -m 30 --retry 2 https://github.com/vernesong/OpenClash/releases/download/TUN-Premium/clash-linux-mipsle-softfloat-2022.03.19.gz -o /tmp/clash_tun.gz
-          gzip -dvf /tmp/clash_tun.gz
-          chmod +x /tmp/clash_tun
-          mv /tmp/clash_tun files/etc/openclash/core/clash_tun
-          rm -rf /tmp/clash_tun.gz
+          # 暂时不要
+          # curl -sL -m 30 --retry 2 https://github.com/vernesong/OpenClash/releases/download/TUN-Premium/clash-linux-mipsle-softfloat-2022.03.19.gz -o /tmp/clash_tun.gz
+          # gzip -dvf /tmp/clash_tun.gz
+          # chmod +x /tmp/clash_tun
+          # mv /tmp/clash_tun files/etc/openclash/core/clash_tun
+          # rm -rf /tmp/clash_tun.gz
 
       - name: Update & install feeds
         run: cd openwrt && ./scripts/feeds update -a && ./scripts/feeds install -a
