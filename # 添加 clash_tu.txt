@@ -1,0 +1,6 @@
+          # 添加 clash_tu
+          # curl -sL -m 30 --retry 2 https://github.com/vernesong/OpenClash/releases/download/TUN-Premium/clash-linux-mipsle-softfloat-2022.03.19.gz -o /tmp/clash_tun.gz
+          # gzip -dvf /tmp/clash_tun.gz
+          # chmod +x /tmp/clash_tun
+          # mv /tmp/clash_tun files/etc/openclash/core/clash_tun
+          # rm -rf /tmp/clash_tun.gz
